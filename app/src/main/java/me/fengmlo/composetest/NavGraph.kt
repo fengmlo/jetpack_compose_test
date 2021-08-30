@@ -12,10 +12,12 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import me.fengmlo.composetest.ui.home.MainPage
 import me.fengmlo.composetest.ui.text.TextPage
+import me.fengmlo.composetest.ui.textfield.TextFieldPage
 
 object MainDestinations {
     const val HOME = "home"
     const val TEXT_ROUTE = "text"
+    const val TEXT_FIELD_ROUTE = "textField"
     const val COURSES_ROUTE = "courses"
     const val COURSE_DETAIL_ROUTE = "course"
     const val COURSE_DETAIL_ID_KEY = "courseId"
@@ -30,6 +32,9 @@ fun NavGraph(navController: NavHostController) {
         }
         appComposable(route = MainDestinations.TEXT_ROUTE) {
             TextPage(navController = navController)
+        }
+        appComposable(route = MainDestinations.TEXT_FIELD_ROUTE) {
+            TextFieldPage(navController = navController)
         }
     }
 }

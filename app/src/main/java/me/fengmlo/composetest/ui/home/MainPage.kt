@@ -79,7 +79,7 @@ fun MainPage(navController: NavController) {
                             navController.navigate(MainDestinations.TEXT_ROUTE)
                         })
                         ListItem(title = "TextField", onClick = {
-                            navController.navigate(MainDestinations.TEXT_ROUTE)
+                            navController.navigate(MainDestinations.TEXT_FIELD_ROUTE)
                         })
                     }
                 }

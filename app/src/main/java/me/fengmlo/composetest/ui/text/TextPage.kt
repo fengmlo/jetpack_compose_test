@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
@@ -23,8 +24,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontFamily
@@ -45,17 +44,18 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import me.fengmlo.composetest.R
+import me.fengmlo.composetest.ui.common.AppTopBar
 
 @Composable
 fun TextPage(navController: NavHostController) {
-    val systemUiController = rememberSystemUiController()
+//    val systemUiController = rememberSystemUiController()
     val colorPrimary = MaterialTheme.colors.primary
     val snackbarHostState = remember { SnackbarHostState() }
     val channel = remember { Channel<String>(Channel.CONFLATED) }
 
-    SideEffect {
-        systemUiController.setStatusBarColor(colorPrimary)
-    }
+//    SideEffect {
+//        systemUiController.setStatusBarColor(colorPrimary) // 如果手动处理状态栏颜色的话用这行代码
+//    }
     LaunchedEffect(channel) {
         channel.receiveAsFlow().collect {
             snackbarHostState.showSnackbar(message = it)
@@ -65,18 +65,21 @@ fun TextPage(navController: NavHostController) {
         Scaffold(
             scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState),
             topBar = {
-                TopAppBar(
-                    modifier = Modifier.statusBarsPadding(),
-                    title = {
-                        Text(text = "Text")
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
-                        }
-                    },
-                )
-            }) {
+//                TopAppBar(
+//                    modifier = Modifier.statusBarsPadding(),
+//                    title = {
+//                        Text(text = "Text")
+//                    },
+//                    navigationIcon = {
+//                        IconButton(onClick = { navController.popBackStack() }) {
+//                            Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
+//                        }
+//                    },
+//                )
+                // 换用统一的AppBar
+                AppTopBar(navController = navController, title = "Text")
+            }
+        ) {
             Column(
                 modifier = Modifier
                     .padding(it)
