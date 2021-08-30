@@ -3,6 +3,7 @@ package me.fengmlo.composetest
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
@@ -25,10 +26,10 @@ object MainDestinations {
 
 @ExperimentalAnimationApi
 @Composable
-fun NavGraph(navController: NavHostController) {
+fun NavGraph(navController: NavHostController, dark: MutableState<Boolean>) {
     AnimatedNavHost(navController = navController, startDestination = MainDestinations.HOME) {
         appComposable(route = MainDestinations.HOME) {
-            MainPage(navController = navController)
+            MainPage(navController = navController, dark = dark)
         }
         appComposable(route = MainDestinations.TEXT_ROUTE) {
             TextPage(navController = navController)
@@ -45,16 +46,16 @@ private fun NavGraphBuilder.appComposable(
     arguments: List<NamedNavArgument> = emptyList(),
     deepLinks: List<NavDeepLink> = emptyList(),
     enterTransition: (AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition?)? = { _, _ ->
-        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(300))
+        slideInHorizontally(initialOffsetX = { it/*1000*/ }, animationSpec = tween(300))
     },
     exitTransition: (AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?)? = { _, _ ->
-        slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(300))
+        slideOutHorizontally(targetOffsetX = { -it /*-1000*/ }, animationSpec = tween(300))
     },
     popEnterTransition: (AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition?)? = { _, _ ->
-        slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(300))
+        slideInHorizontally(initialOffsetX = { -it/*-1000*/ }, animationSpec = tween(300))
     },
     popExitTransition: (AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?)? = { _, _ ->
-        slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(300))
+        slideOutHorizontally(targetOffsetX = { it/*1000*/ }, animationSpec = tween(300))
     },
     content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
 ) = composable(
