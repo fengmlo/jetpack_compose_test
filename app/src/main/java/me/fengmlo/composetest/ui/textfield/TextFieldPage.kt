@@ -17,6 +17,7 @@ import androidx.compose.ui.focus.focusOrder
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
@@ -102,7 +103,7 @@ fun TextFieldPage(navController: NavHostController) {
 
 @Composable
 fun SimpleFilledTextField(modifier: Modifier = Modifier, showMessage: (String) -> Unit, onClickNext: () -> Unit) {
-    val (text, onTextChange) = remember { mutableStateOf("Hello") }
+    val (text, onTextChange) = remember { mutableStateOf(TextFieldValue(text = "Hello", selection = TextRange("Hello".length, "Hello".length))) }
     TextField(
         modifier = modifier.fillMaxWidth(),
         value = text,
@@ -160,7 +161,7 @@ fun SimpleFilledTextField(modifier: Modifier = Modifier, showMessage: (String) -
 
 @Composable
 fun SimplePasswordTextField(modifier: Modifier = Modifier, showMessage: (String) -> Unit) {
-    val (text, onTextChange) = remember { mutableStateOf("Hello") }
+    val (text, onTextChange) = remember { mutableStateOf(TextFieldValue(text = "Hello", selection = TextRange("Hello".length, "Hello".length))) }
     val (showPassword, onShowPasswordChanged) = remember { mutableStateOf(false) }
     val maxLength = 6
 
@@ -168,7 +169,7 @@ fun SimplePasswordTextField(modifier: Modifier = Modifier, showMessage: (String)
         modifier = modifier.fillMaxWidth(),
         value = text,
         onValueChange = {
-            if (it.length <= maxLength) onTextChange(it) else {
+            if (it.text.length <= maxLength) onTextChange(it) else {
                 showMessage("最大长度6")
             }
         },
@@ -277,7 +278,7 @@ fun SearchTextField(modifier: Modifier = Modifier, showMessage: (String) -> Unit
             }
         ),
         singleLine = true,
-//        shape = RoundedCornerShape(25.dp),
+        shape = CircleShape,
         colors = TextFieldDefaults.textFieldColors(
             textColor = Color.Blue,
             cursorColor = Color.Red,

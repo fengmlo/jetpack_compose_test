@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NamedNavArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
+import me.fengmlo.composetest.ui.button.ButtonPage
 import me.fengmlo.composetest.ui.home.MainPage
 import me.fengmlo.composetest.ui.text.TextPage
 import me.fengmlo.composetest.ui.textfield.TextFieldPage
@@ -19,7 +20,7 @@ object MainDestinations {
     const val HOME = "home"
     const val TEXT_ROUTE = "text"
     const val TEXT_FIELD_ROUTE = "textField"
-    const val COURSES_ROUTE = "courses"
+    const val BUTTON_ROUTE = "button"
     const val COURSE_DETAIL_ROUTE = "course"
     const val COURSE_DETAIL_ID_KEY = "courseId"
 }
@@ -27,15 +28,33 @@ object MainDestinations {
 @ExperimentalAnimationApi
 @Composable
 fun NavGraph(navController: NavHostController, dark: MutableState<Boolean>) {
-    AnimatedNavHost(navController = navController, startDestination = MainDestinations.HOME) {
-        appComposable(route = MainDestinations.HOME) {
+    AnimatedNavHost(
+        navController = navController,
+        startDestination = MainDestinations.HOME,
+        enterTransition = { _, _ ->
+            slideInHorizontally(initialOffsetX = { it/*1000*/ }, animationSpec = tween(300))
+        },
+        exitTransition = { _, _ ->
+            slideOutHorizontally(targetOffsetX = { -it /*-1000*/ }, animationSpec = tween(300))
+        },
+        popEnterTransition = { _, _ ->
+            slideInHorizontally(initialOffsetX = { -it/*-1000*/ }, animationSpec = tween(300))
+        },
+        popExitTransition = { _, _ ->
+            slideOutHorizontally(targetOffsetX = { it/*1000*/ }, animationSpec = tween(300))
+        }
+    ) {
+        composable(route = MainDestinations.HOME) {
             MainPage(navController = navController, dark = dark)
         }
-        appComposable(route = MainDestinations.TEXT_ROUTE) {
+        composable(route = MainDestinations.TEXT_ROUTE) {
             TextPage(navController = navController)
         }
-        appComposable(route = MainDestinations.TEXT_FIELD_ROUTE) {
+        composable(route = MainDestinations.TEXT_FIELD_ROUTE) {
             TextFieldPage(navController = navController)
+        }
+        composable(route = MainDestinations.BUTTON_ROUTE) {
+            ButtonPage(naviController = navController)
         }
     }
 }

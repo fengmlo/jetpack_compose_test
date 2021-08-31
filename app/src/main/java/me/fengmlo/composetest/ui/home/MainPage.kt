@@ -65,6 +65,10 @@ fun MainPage(navController: NavController, dark: MutableState<Boolean>) {
             ListItem(title = "TextField", onClick = {
                 navController.navigate(MainDestinations.TEXT_FIELD_ROUTE)
             })
+
+            ListItem(title = "Button", onClick = {
+                navController.navigate(MainDestinations.BUTTON_ROUTE)
+            })
         }
     }
 }
