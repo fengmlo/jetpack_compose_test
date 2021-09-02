@@ -69,6 +69,10 @@ fun MainPage(navController: NavController, dark: MutableState<Boolean>) {
             ListItem(title = "Button", onClick = {
                 navController.navigate(MainDestinations.BUTTON_ROUTE)
             })
+
+            ListItem(title = "Dialog", onClick = {
+                navController.navigate(MainDestinations.DIALOG)
+            })
         }
     }
 }
