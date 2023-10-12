@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -15,7 +16,7 @@ import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
@@ -37,9 +38,6 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.statusBarsPadding
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -49,7 +47,7 @@ import me.fengmlo.composetest.ui.common.AppTopBar
 @Composable
 fun TextPage(navController: NavHostController) {
 //    val systemUiController = rememberSystemUiController()
-    val colorPrimary = MaterialTheme.colors.primary
+    val colorPrimary = MaterialTheme.colorScheme.primary
     val snackbarHostState = remember { SnackbarHostState() }
     val channel = remember { Channel<String>(Channel.CONFLATED) }
 
@@ -61,9 +59,9 @@ fun TextPage(navController: NavHostController) {
             snackbarHostState.showSnackbar(message = it)
         }
     }
-    ProvideWindowInsets {
+    Box {
         Scaffold(
-            scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState),
+            snackbarHost = { SnackbarHost(snackbarHostState) },
             topBar = {
 //                TopAppBar(
 //                    modifier = Modifier.statusBarsPadding(),
@@ -99,13 +97,29 @@ fun TextPage(navController: NavHostController) {
                     fontWeight = FontWeight.W200
                 )
                 Divider()
-                Text(text = "Text with Light(W300) fontWeight, 字体粗细", fontSize = 20.sp, fontWeight = FontWeight.W300)
+                Text(
+                    text = "Text with Light(W300) fontWeight, 字体粗细",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.W300
+                )
                 Divider()
-                Text(text = "Text with Normal(W400) fontWeight, 字体粗细", fontSize = 20.sp, fontWeight = FontWeight.W400)
+                Text(
+                    text = "Text with Normal(W400) fontWeight, 字体粗细",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.W400
+                )
                 Divider()
-                Text(text = "Text with Medium(W500) fontWeight, 字体粗细", fontSize = 20.sp, fontWeight = FontWeight.W500)
+                Text(
+                    text = "Text with Medium(W500) fontWeight, 字体粗细",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.W500
+                )
                 Divider()
-                Text(text = "Text with SemiBold(W600) fontWeight, 字体粗细", fontSize = 20.sp, fontWeight = FontWeight.W600)
+                Text(
+                    text = "Text with SemiBold(W600) fontWeight, 字体粗细",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.W600
+                )
                 Divider()
                 Text(text = "Text with Bold(W700) fontWeight, 字体粗细", fontSize = 20.sp, fontWeight = FontWeight.W700)
                 Divider()
@@ -115,7 +129,11 @@ fun TextPage(navController: NavHostController) {
                     fontWeight = FontWeight.W800
                 )
                 Divider()
-                Text(text = "Text with Black(W900) fontWeight, 字体粗细", fontSize = 20.sp, fontWeight = FontWeight.W900)
+                Text(
+                    text = "Text with Black(W900) fontWeight, 字体粗细",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.W900
+                )
                 Divider()
 
                 Text(text = "Text with Cursive FontFamily, 字体", fontSize = 20.sp, fontFamily = FontFamily.Cursive)

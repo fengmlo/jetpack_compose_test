@@ -1,7 +1,7 @@
 package me.fengmlo.composetest.ui.common
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -11,12 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppTopBar(navController: NavHostController, title: String) {
     TopAppBar(
@@ -28,12 +26,12 @@ fun AppTopBar(navController: NavHostController, title: String) {
         title = {
             Text(text = title)
         },
-        contentPadding = rememberInsetsPaddingValues(
-            LocalWindowInsets.current.statusBars,
-            additionalStart = 4.dp,
-            additionalEnd = 4.dp,
-            applyBottom = false,
-        )
+//        contentPadding = rememberInsetsPaddingValues(
+//            LocalWindowInsets.current.statusBars,
+//            additionalStart = 4.dp,
+//            additionalEnd = 4.dp,
+//            applyBottom = false,
+//        )
     )
 }
 
@@ -43,15 +41,15 @@ fun TopAppBar(
     modifier: Modifier = Modifier,
     navigationIcon: @Composable (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
-    backgroundColor: Color = MaterialTheme.colors.primarySurface,
+    backgroundColor: Color = MaterialTheme.colorScheme.surface,
     contentColor: Color = contentColorFor(backgroundColor),
-    elevation: Dp = AppBarDefaults.TopAppBarElevation,
+//    elevation: Dp = AppBarDefaults.TopAppBarElevation,
     contentPadding: PaddingValues,
 ) {
     AppBar(
         backgroundColor,
         contentColor,
-        elevation,
+//        elevation,
         contentPadding,
         RectangleShape,
         modifier
@@ -61,7 +59,7 @@ fun TopAppBar(
         } else {
             Row(TitleIconModifier, verticalAlignment = Alignment.CenterVertically) {
                 CompositionLocalProvider(
-                    LocalContentAlpha provides ContentAlpha.high,
+                    LocalContentColor provides MaterialTheme.colorScheme.onSurface,
                     content = navigationIcon
                 )
             }
@@ -71,15 +69,15 @@ fun TopAppBar(
             Modifier.fillMaxHeight().weight(1f),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ProvideTextStyle(value = MaterialTheme.typography.h6) {
+            ProvideTextStyle(value = MaterialTheme.typography.titleLarge) {
                 CompositionLocalProvider(
-                    LocalContentAlpha provides ContentAlpha.high,
+                    LocalContentColor provides MaterialTheme.colorScheme.onSurface,
                     content = title
                 )
             }
         }
 
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
             Row(
                 Modifier.fillMaxHeight(),
                 horizontalArrangement = Arrangement.End,
@@ -94,7 +92,7 @@ fun TopAppBar(
 private fun AppBar(
     backgroundColor: Color,
     contentColor: Color,
-    elevation: Dp,
+//    elevation: Dp,
     contentPadding: PaddingValues,
     shape: Shape,
     modifier: Modifier = Modifier,
@@ -103,7 +101,7 @@ private fun AppBar(
     Surface(
         color = backgroundColor,
         contentColor = contentColor,
-        elevation = elevation,
+//        elevation = elevation,
         shape = shape,
         modifier = modifier
     ) {

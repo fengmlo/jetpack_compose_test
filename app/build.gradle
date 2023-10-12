@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 34
 
     defaultConfig {
         applicationId "me.fengmlo.composetest"
@@ -31,48 +31,68 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-        useIR = true
     }
     buildFeatures {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion '1.5.21'
+        kotlinCompilerExtensionVersion "1.5.3"
     }
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    namespace 'me.fengmlo.composetest'
 }
 
 dependencies {
+    def composeBom = platform('androidx.compose:compose-bom:2023.10.00')
+    implementation composeBom
+    androidTestImplementation composeBom
 
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.material:material:$compose_version"
-    implementation 'androidx.compose.material:material-icons-extended:1.0.1'
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.activity:activity-compose:1.3.1'
-    implementation "androidx.compose.animation:animation:$compose_version"
-    implementation "androidx.compose.foundation:foundation:$compose_version"
-    implementation "androidx.compose.foundation:foundation-layout:$compose_version"
-    implementation "androidx.compose.runtime:runtime:$compose_version"
-    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-beta02"
+    // UI
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.foundation:foundation'
+    implementation "androidx.compose.ui:ui"
+    implementation 'androidx.compose.material:material-icons-core'
+    implementation 'androidx.compose.material:material-icons-extended'
+    implementation 'androidx.compose.material3:material3-window-size-class'
+
+    // Android Studio Preview support
+    implementation "androidx.compose.ui:ui-tooling-preview"
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+
+    // UI Tests
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+
+    // Integration with activities
+    implementation 'androidx.activity:activity-compose:1.7.2'
+    // Optional - Integration with ViewModels
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2'
+//    // Optional - Integration with LiveData
+//    implementation 'androidx.compose.runtime:runtime-livedata'
+//    // Optional - Integration with RxJava
+//    implementation 'androidx.compose.runtime:runtime-rxjava2'
+
+
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
+
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha09"
+
     implementation "io.coil-kt:coil-compose:1.3.0"
-    implementation "com.google.accompanist:accompanist-insets:0.17.0"
-    implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
-    implementation "com.google.accompanist:accompanist-navigation-animation:0.17.0"
-    implementation "androidx.navigation:navigation-compose:2.4.0-alpha07"
-    implementation 'androidx.navigation:navigation-runtime-ktx:2.3.5'
+
+    implementation "androidx.navigation:navigation-compose:2.7.4"
+    implementation 'androidx.navigation:navigation-runtime-ktx:2.7.4'
+
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.32.0"
+    implementation "com.google.accompanist:accompanist-drawablepainter:0.32.0"
 
     testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }

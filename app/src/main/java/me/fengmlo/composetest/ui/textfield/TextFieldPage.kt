@@ -7,7 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.insets.ProvideWindowInsets
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -45,15 +44,19 @@ fun TextFieldPage(navController: NavHostController) {
         }
     }
 
-    ProvideWindowInsets {
+    Box {
         Scaffold(
             topBar = {
                 AppTopBar(navController, title = "TextField")
             },
-            scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
+            snackbarHost = { SnackbarHost(snackbarHostState) }
         ) {
 
-            Column(modifier = Modifier.verticalScroll(state = rememberScrollState())) {
+            Column(
+                modifier = Modifier
+                    .padding(it)
+                    .verticalScroll(state = rememberScrollState())
+            ) {
                 SimpleFilledTextField(
                     modifier = Modifier
                         .padding(16.dp)
@@ -101,9 +104,17 @@ fun TextFieldPage(navController: NavHostController) {
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SimpleFilledTextField(modifier: Modifier = Modifier, showMessage: (String) -> Unit, onClickNext: () -> Unit) {
-    val (text, onTextChange) = remember { mutableStateOf(TextFieldValue(text = "Hello", selection = TextRange("Hello".length, "Hello".length))) }
+    val (text, onTextChange) = remember {
+        mutableStateOf(
+            TextFieldValue(
+                text = "Hello",
+                selection = TextRange("Hello".length, "Hello".length)
+            )
+        )
+    }
     TextField(
         modifier = modifier.fillMaxWidth(),
         value = text,
@@ -148,10 +159,10 @@ fun SimpleFilledTextField(modifier: Modifier = Modifier, showMessage: (String) -
 //        maxLines = 2,
 //        interactionSource = remember { MutableInteractionSource() },
         shape = RoundedCornerShape(16.dp),
-        colors = TextFieldDefaults.textFieldColors(
-            textColor = Color.Blue,
+        colors = OutlinedTextFieldDefaults.colors(
+//            textColor = Color.Blue,
             cursorColor = Color.Red,
-            placeholderColor = Color.Yellow
+//            placeholderColor = Color.Yellow
         ),
         placeholder = {
             Text(text = "This is hint")
@@ -161,7 +172,14 @@ fun SimpleFilledTextField(modifier: Modifier = Modifier, showMessage: (String) -
 
 @Composable
 fun SimplePasswordTextField(modifier: Modifier = Modifier, showMessage: (String) -> Unit) {
-    val (text, onTextChange) = remember { mutableStateOf(TextFieldValue(text = "Hello", selection = TextRange("Hello".length, "Hello".length))) }
+    val (text, onTextChange) = remember {
+        mutableStateOf(
+            TextFieldValue(
+                text = "Hello",
+                selection = TextRange("Hello".length, "Hello".length)
+            )
+        )
+    }
     val (showPassword, onShowPasswordChanged) = remember { mutableStateOf(false) }
     val maxLength = 6
 
@@ -220,10 +238,10 @@ fun SimplePasswordTextField(modifier: Modifier = Modifier, showMessage: (String)
         maxLines = 2,
 //        interactionSource = remember { MutableInteractionSource() },
         shape = RoundedCornerShape(16.dp),
-        colors = TextFieldDefaults.textFieldColors(
-            textColor = Color.Blue,
+        colors = OutlinedTextFieldDefaults.colors(
+//            textColor = Color.Blue,
             cursorColor = Color.Red,
-            placeholderColor = Color.Yellow
+//            placeholderColor = Color.Yellow
         ),
         placeholder = {
             Text(text = "This is hint")
@@ -279,14 +297,14 @@ fun SearchTextField(modifier: Modifier = Modifier, showMessage: (String) -> Unit
         ),
         singleLine = true,
         shape = CircleShape,
-        colors = TextFieldDefaults.textFieldColors(
-            textColor = Color.Blue,
+        colors = OutlinedTextFieldDefaults.colors(
+//            textColor = Color.Blue,
             cursorColor = Color.Red,
-            placeholderColor = Color.Gray,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent,
-            backgroundColor = Color.White
+//            placeholderColor = Color.Gray,
+//            focusedIndicatorColor = Color.Transparent,
+//            unfocusedIndicatorColor = Color.Transparent,
+//            disabledIndicatorColor = Color.Transparent,
+//            backgroundColor = Color.White
         ),
         placeholder = {
             Text(text = "请输入要搜索的内容")

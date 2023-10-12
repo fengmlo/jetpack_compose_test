@@ -4,7 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
@@ -28,15 +28,16 @@ import me.fengmlo.composetest.ui.common.AppTopBar
 @ExperimentalComposeUiApi
 @Composable
 fun DialogPage(naviController: NavHostController) {
-    val scaffoldState = rememberScaffoldState()
+    val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = { AppTopBar(navController = naviController, title = "Dialog") },
-        scaffoldState = scaffoldState
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) {
         Column(
             modifier = Modifier
+                .padding(it)
 //            .height(150.dp)
 //            .verticalScroll(state = rememberScrollState()) // 放开这里的注释可以测试Popup跟随anchor运动
                 .background(color = Color.LightGray)
@@ -55,7 +56,7 @@ fun DialogPage(naviController: NavHostController) {
                 onDismissRequest = {
                     dialogOpen1.value = false
                     scope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar(message = "Dialog Dismiss")
+                        snackbarHostState.showSnackbar(message = "Dialog Dismiss")
                     }
                 }
             )
@@ -65,7 +66,7 @@ fun DialogPage(naviController: NavHostController) {
                 onDismissRequest = {
                     dialogOpen2.value = false
                     scope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar(message = "AlertDialog Dismiss")
+                        snackbarHostState.showSnackbar(message = "AlertDialog Dismiss")
                     }
                 }
             )
@@ -75,7 +76,7 @@ fun DialogPage(naviController: NavHostController) {
                 onDismissRequest = {
                     dialogOpen3.value = false
                     scope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar(message = "AlertDialog Dismiss")
+                        snackbarHostState.showSnackbar(message = "AlertDialog Dismiss")
                     }
                 }
             )
@@ -85,7 +86,7 @@ fun DialogPage(naviController: NavHostController) {
                 onDismissRequest = {
                     popupOpen1.value = false
                     scope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar(message = "Popup Dismiss")
+                        snackbarHostState.showSnackbar(message = "Popup Dismiss")
                     }
                 }
             )
@@ -95,7 +96,7 @@ fun DialogPage(naviController: NavHostController) {
                 onDismissRequest = {
                     popupOpen2.value = false
                     scope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar(message = "Popup Dismiss")
+                        snackbarHostState.showSnackbar(message = "Popup Dismiss")
                     }
                 }
             )
@@ -105,7 +106,7 @@ fun DialogPage(naviController: NavHostController) {
                 onDismissRequest = {
                     popupOpen3.value = false
                     scope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar(message = "Popup Dismiss")
+                        snackbarHostState.showSnackbar(message = "Popup Dismiss")
                     }
                 }
             )
@@ -115,7 +116,7 @@ fun DialogPage(naviController: NavHostController) {
                 onDismissRequest = {
                     dropdownState.value = false
                     scope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar(message = "Dropdown Dismiss")
+                        snackbarHostState.showSnackbar(message = "Dropdown Dismiss")
                     }
                 }
             )
@@ -143,7 +144,7 @@ private fun DialogSample(
             Column(
                 modifier = Modifier
                     .padding(horizontal = 32.dp)
-                    .background(color = MaterialTheme.colors.surface, shape = RoundedCornerShape(10.dp))
+                    .background(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(10.dp))
                     .padding(16.dp)
                     .fillMaxWidth()
             ) {
@@ -169,15 +170,14 @@ private fun AlertDialogSample(
     if (dialogOpen.value) {
         AlertDialog(
             onDismissRequest = onDismissRequest, // 这个只会在点击返回和dialog外面出发dismiss的时候才会调用
-            buttons = {
-                Row {
-                    Spacer(modifier = Modifier.weight(1f))
-                    TextButton(onClick = { dialogOpen.value = false }) {
-                        Text(text = "确定")
-                    }
-                    TextButton(onClick = { dialogOpen.value = false }) {
-                        Text(text = "取消")
-                    }
+            confirmButton = {
+                TextButton(onClick = { dialogOpen.value = false }) {
+                    Text(text = "确定")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { dialogOpen.value = false }) {
+                    Text(text = "取消")
                 }
             },
             title = {
@@ -187,8 +187,8 @@ private fun AlertDialogSample(
                 Text(text = "这是Text")
             },
             shape = RoundedCornerShape(10.dp),
-            backgroundColor = MaterialTheme.colors.surface,
-            contentColor = MaterialTheme.colors.onSurface,
+            containerColor = MaterialTheme.colorScheme.surface,
+            textContentColor = MaterialTheme.colorScheme.onSurface,
             properties = DialogProperties(
                 dismissOnBackPress = false,
                 dismissOnClickOutside = false,
@@ -233,8 +233,8 @@ private fun AlertDialogSample2(
                 Text(text = "这是Text")
             },
             shape = RoundedCornerShape(10.dp),
-            backgroundColor = MaterialTheme.colors.surface,
-            contentColor = MaterialTheme.colors.onSurface,
+            containerColor = MaterialTheme.colorScheme.surface,
+            textContentColor = MaterialTheme.colorScheme.onSurface,
             properties = DialogProperties(
                 dismissOnBackPress = true,
                 dismissOnClickOutside = true,
@@ -487,12 +487,12 @@ private fun DropdownMenuSample(
             )
         ) {
             list.forEach {
-                DropdownMenuItem(onClick = {
-                    expanded.value = false
-                    selected.value = it
-                }) {
-                    Text(text = it.toString())
-                }
+                DropdownMenuItem(
+                    text = { Text(text = it.toString()) },
+                    onClick = {
+                        expanded.value = false
+                        selected.value = it
+                    })
                 Divider()
             }
         }

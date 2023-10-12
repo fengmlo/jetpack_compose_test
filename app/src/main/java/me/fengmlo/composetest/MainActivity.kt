@@ -4,16 +4,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import me.fengmlo.composetest.ui.theme.ComposeTestTheme
 
@@ -27,10 +29,10 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            val navController: NavHostController = rememberAnimatedNavController()
+            val navController: NavHostController = rememberNavController()
             val systemUiController = rememberSystemUiController()
             val dark = remember { mutableStateOf(false) }
-            val useDarkIcons = MaterialTheme.colors.isLight
+            val useDarkIcons = MaterialTheme.colorScheme.isLight()
 
             SideEffect {
                 // Update all of the system bar colors to be transparent, and use
@@ -39,15 +41,20 @@ class MainActivity : ComponentActivity() {
                     color = Color.Transparent,
                     darkIcons = useDarkIcons
                 )
+                systemUiController.setNavigationBarColor(
+                    color = Color.Transparent,
+                    darkIcons = useDarkIcons
+                )
                 // setStatusBarsColor() and setNavigationBarsColor() also exist
             }
             ComposeTestTheme(darkTheme = dark.value) {
-                ProvideWindowInsets {
-                    NavGraph(navController, dark)
-                }
+                NavGraph(navController, dark)
             }
         }
     }
+
+    @Composable
+    fun ColorScheme.isLight() = this.background.luminance() > 0.5
 
 }
 

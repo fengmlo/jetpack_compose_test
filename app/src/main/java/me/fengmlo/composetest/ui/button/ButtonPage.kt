@@ -7,7 +7,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Android
@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import me.fengmlo.composetest.ui.common.AppTopBar
 
@@ -41,10 +40,14 @@ fun ButtonPage(naviController: NavHostController) {
     }
 
     Scaffold(
-        scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState),
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = { AppTopBar(navController = naviController, title = "Button") }
     ) {
-        Column(modifier = Modifier.verticalScroll(state = rememberScrollState())) {
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .verticalScroll(state = rememberScrollState())
+        ) {
             Button(modifier = Modifier.padding(16.dp), onClick = { channel.trySend("点击Button") }) {
                 Text(text = "按钮")
             }
@@ -62,7 +65,7 @@ fun ButtonPage(naviController: NavHostController) {
             Button(
                 modifier = Modifier.padding(16.dp),
                 onClick = { channel.trySend("点击Button") },
-                elevation = ButtonDefaults.elevation(
+                elevation = ButtonDefaults.buttonElevation(
                     defaultElevation = 0.dp,
                     pressedElevation = 0.dp,
                     disabledElevation = 0.dp
@@ -78,14 +81,17 @@ fun ButtonPage(naviController: NavHostController) {
                 shape = CircleShape,
                 border = BorderStroke(1.dp, color = Color.Black),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.White,
+                    containerColor = Color.White,
                     contentColor = Color.Black,
-                    disabledBackgroundColor = Color.Gray,
                     disabledContentColor = Color.Gray
                 ),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
             ) {
-                Icon(imageVector = Icons.TwoTone.FavoriteBorder, contentDescription = null, tint = MaterialTheme.colors.primary)
+                Icon(
+                    imageVector = Icons.TwoTone.FavoriteBorder,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
                 Spacer(modifier = Modifier.padding(start = 6.dp))
                 Text(text = "按钮自定义样式")
             }
@@ -111,7 +117,11 @@ fun ButtonPage(naviController: NavHostController) {
                 modifier = Modifier.padding(16.dp),
                 onClick = { channel.trySend("点击IconButton") }
             ) {
-                Icon(imageVector = Icons.Filled.Android, contentDescription = null, tint = MaterialTheme.colors.primary)
+                Icon(
+                    imageVector = Icons.Filled.Android,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
             }
             Divider()
 
@@ -126,7 +136,7 @@ fun ButtonPage(naviController: NavHostController) {
 
             FloatingActionButton(
                 modifier = Modifier.padding(16.dp),
-                backgroundColor = MaterialTheme.colors.primary,
+                containerColor = MaterialTheme.colorScheme.primary,
                 onClick = { channel.trySend("点击FloatingActionButton") }) {
                 Row(modifier = Modifier.padding(horizontal = 16.dp)) {
                     Icon(imageVector = Icons.Filled.Add, contentDescription = null)
@@ -158,9 +168,10 @@ private fun RadioButtonSample(channel: Channel<String>) {
                     selected = selected == it,
                     onClick = null,
                     colors = RadioButtonDefaults.colors(
-                        selectedColor = MaterialTheme.colors.primary,
-                        unselectedColor = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
-                        disabledColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
+                        selectedColor = MaterialTheme.colorScheme.primary,
+                        unselectedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                        disabledSelectedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
+                        disabledUnselectedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
                     )
                 )
                 Text(text = it, modifier = Modifier.align(Alignment.CenterVertically))
@@ -189,7 +200,7 @@ fun CheckboxSample() {
         modifier = Modifier.padding(start = 16.dp),
         state = parentState,
         onClick = onParentClick,
-        colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
+        colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colorScheme.primary)
     )
     Spacer(modifier = Modifier.size(25.dp))
     Column(modifier = Modifier.padding(start = 26.dp)) {
@@ -206,7 +217,7 @@ fun SwitchSample() {
         checked = checkedState,
         onCheckedChange = onCheckedStateChange,
         modifier = Modifier.padding(16.dp),
-        colors = SwitchDefaults.colors(checkedThumbColor = MaterialTheme.colors.primary)
+//        colors = SwitchDefaults.colors(checkedThumbColor = MaterialTheme.colorScheme.primary)
     )
 }
 

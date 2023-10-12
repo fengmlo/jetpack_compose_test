@@ -5,16 +5,17 @@ import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NamedNavArgument
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
+import androidx.navigation.compose.composable
 import me.fengmlo.composetest.ui.button.ButtonPage
 import me.fengmlo.composetest.ui.dialog.DialogPage
 import me.fengmlo.composetest.ui.home.MainPage
+import me.fengmlo.composetest.ui.image.ImagePage
 import me.fengmlo.composetest.ui.text.TextPage
 import me.fengmlo.composetest.ui.textfield.TextFieldPage
 
@@ -24,27 +25,27 @@ object MainDestinations {
     const val TEXT_FIELD_ROUTE = "textField"
     const val BUTTON_ROUTE = "button"
     const val DIALOG = "dialog"
+    const val IMAGE = "image"
 }
 
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @Composable
 fun NavGraph(navController: NavHostController, dark: MutableState<Boolean>) {
-    AnimatedNavHost(
-        navController = navController,
-        startDestination = MainDestinations.HOME,
-        enterTransition = { _, _ ->
+    NavHost(
+        navController = navController, startDestination = MainDestinations.HOME,
+        enterTransition = {
             slideInHorizontally(initialOffsetX = { it/*1000*/ }, animationSpec = tween(300))
         },
-        exitTransition = { _, _ ->
+        exitTransition = {
             slideOutHorizontally(targetOffsetX = { -it /*-1000*/ }, animationSpec = tween(300))
         },
-        popEnterTransition = { _, _ ->
+        popEnterTransition = {
             slideInHorizontally(initialOffsetX = { -it/*-1000*/ }, animationSpec = tween(300))
         },
-        popExitTransition = { _, _ ->
+        popExitTransition = {
             slideOutHorizontally(targetOffsetX = { it/*1000*/ }, animationSpec = tween(300))
-        }
+        },
     ) {
         composable(route = MainDestinations.HOME) {
             MainPage(navController = navController, dark = dark)
@@ -61,6 +62,9 @@ fun NavGraph(navController: NavHostController, dark: MutableState<Boolean>) {
         composable(route = MainDestinations.DIALOG) {
             DialogPage(naviController = navController)
         }
+        composable(route = MainDestinations.IMAGE) {
+            ImagePage(navController = navController)
+        }
     }
 }
 
@@ -69,26 +73,19 @@ private fun NavGraphBuilder.appComposable(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
     deepLinks: List<NavDeepLink> = emptyList(),
-    enterTransition: (AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition?)? = { _, _ ->
+    enterTransition: (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = {
         slideInHorizontally(initialOffsetX = { it/*1000*/ }, animationSpec = tween(300))
     },
-    exitTransition: (AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?)? = { _, _ ->
+    exitTransition: (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = {
         slideOutHorizontally(targetOffsetX = { -it /*-1000*/ }, animationSpec = tween(300))
     },
-    popEnterTransition: (AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition?)? = { _, _ ->
+    popEnterTransition: (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = {
         slideInHorizontally(initialOffsetX = { -it/*-1000*/ }, animationSpec = tween(300))
     },
-    popExitTransition: (AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition?)? = { _, _ ->
+    popExitTransition: (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = {
         slideOutHorizontally(targetOffsetX = { it/*1000*/ }, animationSpec = tween(300))
     },
-    content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
+    content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit,
 ) = composable(
-    route,
-    arguments,
-    deepLinks,
-    enterTransition,
-    exitTransition,
-    popEnterTransition,
-    popExitTransition,
-    content
+    route, arguments, deepLinks, enterTransition, exitTransition, popEnterTransition, popExitTransition, content
 )
