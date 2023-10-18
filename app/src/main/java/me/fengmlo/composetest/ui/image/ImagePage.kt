@@ -2,11 +2,13 @@ package me.fengmlo.composetest.ui.image
 
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
@@ -14,12 +16,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import me.fengmlo.composetest.R
 import me.fengmlo.composetest.ui.common.AppTopBar
@@ -59,6 +63,12 @@ fun ImagePage(navController: NavHostController) {
                     .clickable { }
             )
 
+            AsyncImage(
+                modifier = Modifier.size(200.dp).background(Color.Blue),
+                model = "https://pic.616pic.com/bg_w1180/00/14/86/YCnYPJmxlf.jpg",
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
 
         }
     }

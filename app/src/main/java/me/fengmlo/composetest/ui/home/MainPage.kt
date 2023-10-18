@@ -1,26 +1,27 @@
 package me.fengmlo.composetest.ui.home
 
+import ListItem
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import me.fengmlo.composetest.MainDestinations
+import me.fengmlo.composetest.pages
 import me.fengmlo.composetest.ui.theme.ComposeTestTheme
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,55 +69,13 @@ fun MainPage(navController: NavController, dark: MutableState<Boolean>) {
                     .padding(it)
                     .verticalScroll(state = rememberScrollState())
             ) {
-                ListItem(title = "Text", onClick = {
-                    navController.navigate(MainDestinations.TEXT_ROUTE)
-                })
-
-                ListItem(title = "TextField", onClick = {
-                    navController.navigate(MainDestinations.TEXT_FIELD_ROUTE)
-                })
-
-                ListItem(title = "Button", onClick = {
-                    navController.navigate(MainDestinations.BUTTON_ROUTE)
-                })
-
-                ListItem(title = "Dialog", onClick = {
-                    navController.navigate(MainDestinations.DIALOG)
-                })
-
-                ListItem(title = "Image", onClick = {
-                    navController.navigate(MainDestinations.IMAGE)
-                })
+                pages.forEach { page ->
+                    ListItem(title = page.title, onClick = {
+                        navController.navigate(page.route)
+                    })
+                }
             }
         }
-    }
-}
-
-@Composable
-private fun ListItem(title: String, onClick: () -> Unit) {
-    Column {
-        Row(
-            modifier = Modifier
-                .height(56.dp)
-                .fillMaxWidth()
-                .clickable(onClick = onClick)
-                .padding(start = 16.dp, end = 16.dp),
-        ) {
-            Text(
-                text = title,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .weight(1f)
-            )
-            Icon(
-                modifier = Modifier.align(Alignment.CenterVertically),
-                imageVector = Icons.Filled.NavigateNext,
-                contentDescription = null
-            )
-        }
-        Divider()
     }
 }
 
@@ -160,6 +119,10 @@ fun PreviewDrawer() {
     }
 }
 
+@ExperimentalLayoutApi
+@ExperimentalComposeUiApi
+@ExperimentalFoundationApi
+@ExperimentalMaterial3Api
 @Preview(showBackground = true)
 @Composable
 fun PreviewMainPage() {
